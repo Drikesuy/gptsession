@@ -2,6 +2,7 @@
 const STORAGE_KEY = "token_history";
 const LANG_KEY = "ui_language";
 const STATUS_TIMEOUT = { success: 3000, info: 3000, error: 5000 };
+const SESSION_URL = "https://chatgpt.com/api/auth/session";
 
 // ==================== i18n String Tables ====================
 const I18N = {
@@ -11,6 +12,15 @@ const I18N = {
     copyBtn: "Copy",
     clearInputBtn: "Clear",
     hint: "Tip: Ctrl+Enter to inject quickly",
+    tokenHelpLabel: "Get token:",
+    copyUrlBtn: "Copy",
+    openUrlBtn: "Open",
+    copyUrlTitle: "Copy session API URL",
+    copyUrlAria: "Copy session API URL",
+    openUrlTitle: "Open session API in new tab (login required)",
+    openUrlAria: "Open session API URL",
+    msgUrlCopied: "URL copied to clipboard",
+    msgUrlOpened: "Opened session API in new tab",
     historyLabel: "Account History",
     historyPlaceholder: "-- Select account --",
     deleteBtn: "Delete",
@@ -69,6 +79,15 @@ const I18N = {
     copyBtn: "复制",
     clearInputBtn: "清空",
     hint: "提示：Ctrl+Enter 快速注入",
+    tokenHelpLabel: "获取 Token：",
+    copyUrlBtn: "复制",
+    openUrlBtn: "打开",
+    copyUrlTitle: "复制 Session API 地址",
+    copyUrlAria: "复制 Session API 地址",
+    openUrlTitle: "在新标签页打开 Session API（需已登录）",
+    openUrlAria: "打开 Session API 地址",
+    msgUrlCopied: "地址已复制到剪贴板",
+    msgUrlOpened: "已在新标签页打开 Session API",
     historyLabel: "历史账号",
     historyPlaceholder: "-- 选择历史账号 --",
     deleteBtn: "删除",
@@ -234,6 +253,9 @@ const clearAllHistoryBtn = document.getElementById("clearAllHistoryBtn");
 const copyTokenBtn = document.getElementById("copyTokenBtn");
 const clearInputBtn = document.getElementById("clearInputBtn");
 const langToggleBtn = document.getElementById("langToggle");
+const copyUrlBtn = document.getElementById("copyUrlBtn");
+const openUrlBtn = document.getElementById("openUrlBtn");
+const sessionUrlText = document.getElementById("sessionUrlText");
 
 let statusTimer = null;
 let historyCache = []; // Cached history entries for label re-rendering on lang switch
@@ -419,6 +441,21 @@ function clearInput() {
   hideStatus();
 }
 
+// ==================== Session URL Helpers ====================
+async function copySessionUrl() {
+  try {
+    await navigator.clipboard.writeText(SESSION_URL);
+    showStatus(t("msgUrlCopied"), "success");
+  } catch (_e) {
+    showStatus(t("msgCopyFailed"), "error");
+  }
+}
+
+function openSessionUrl() {
+  chrome.tabs.create({ url: SESSION_URL });
+  showStatus(t("msgUrlOpened"), "info");
+}
+
 // ==================== History Management ====================
 function buildHistoryLabel(entry, index) {
   const baseLabel = entry.label || t("msgAccountPrefix") + (index + 1);
@@ -542,6 +579,9 @@ clearAllHistoryBtn.addEventListener("click", clearAllHistory);
 copyTokenBtn.addEventListener("click", copyToken);
 clearInputBtn.addEventListener("click", clearInput);
 langToggleBtn.addEventListener("click", toggleLanguage);
+copyUrlBtn.addEventListener("click", copySessionUrl);
+openUrlBtn.addEventListener("click", openSessionUrl);
+sessionUrlText.addEventListener("click", openSessionUrl);
 
 historySelect.addEventListener("change", () => {
   const selectedIndex = historySelect.value;

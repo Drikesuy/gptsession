@@ -26,6 +26,12 @@
         spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"
         aria-label="Session Token"></textarea>
       <p class="hint" data-i18n="hint">Tip: Ctrl+Enter to inject quickly</p>
+      <div class="token-help">
+        <span class="token-help-label" data-i18n="tokenHelpLabel">Get token:</span>
+        <span class="token-help-url" id="sessionUrlText" title="https://chatgpt.com/api/auth/session">/api/auth/session</span>
+        <button id="copyUrlBtn" class="btn-tiny" type="button" data-i18n-title="copyUrlTitle" data-i18n-aria="copyUrlAria" data-i18n="copyUrlBtn">Copy</button>
+        <button id="openUrlBtn" class="btn-tiny" type="button" data-i18n-title="openUrlTitle" data-i18n-aria="openUrlAria" data-i18n="openUrlBtn">Open</button>
+      </div>
     </div>
 
     <div class="history-group" id="historyGroup" style="display: none;">

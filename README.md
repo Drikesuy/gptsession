@@ -72,10 +72,10 @@ No Chrome Web Store publish needed — install directly in Developer Mode:
 
 ## 🚀 Usage
 
-1. Obtain your ChatGPT `__Secure-next-auth.session-token` value (a JWT string starting with `eyJ`)
+1. **Get your token** — Log in to [chatgpt.com](https://chatgpt.com) first, then click the extension icon and press **Open** next to "Get token:" (or visit `https://chatgpt.com/api/auth/session` directly). Copy the `sessionToken` value from the JSON response (a JWT string starting with `eyJ`). You can also copy the **entire JSON response** and paste it directly — the extension auto-extracts `sessionToken`.
 2. Click the extension icon in the toolbar to open the popup
    - If the clipboard already contains text starting with `eyJ`, it will be auto-filled
-3. Paste the token into the input field (prefixes, quotes, and JSON formatting are handled automatically)
+3. Paste the token (or full JSON) into the input field (prefixes, quotes, and formatting are handled automatically)
 4. Click **Inject Token** (or press `Ctrl+Enter` while focused in the input field)
 5. On success, the page will automatically reload or redirect to ChatGPT, and you will be logged in
 6. Next time, select an account directly from the **Account History** dropdown to avoid re-pasting

@@ -132,6 +132,59 @@ body {
   text-align: right;
 }
 
+.token-help {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #666;
+  padding: 6px 8px;
+  background: rgba(123, 47, 247, 0.06);
+  border: 1px solid rgba(123, 47, 247, 0.15);
+  border-radius: 6px;
+}
+
+.token-help-label {
+  color: #888;
+  flex-shrink: 0;
+}
+
+.token-help-url {
+  flex: 1;
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 11px;
+  color: #00d2ff;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.token-help-url:hover {
+  color: #7b2ff7;
+  text-decoration: underline;
+}
+
+.btn-tiny {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: transparent;
+  color: #999;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-tiny:hover {
+  border-color: #7b2ff7;
+  color: #fff;
+  background: rgba(123, 47, 247, 0.2);
+}
+
 .history-group {
   display: flex;
   flex-direction: column;

@@ -1,31 +1,31 @@
-## 变更说明
+## Description
 
-<!-- 简要说明本 PR 做了什么、为什么 -->
+<!-- Briefly describe what this PR does and why -->
 
-## 变更类型
+## Change Type
 
-- [ ] feat: 新功能
-- [ ] fix: bug 修复
-- [ ] docs: 文档
-- [ ] style: 代码格式
-- [ ] refactor: 重构
-- [ ] chore: 工具链 / 构建
+- [ ] feat: New feature
+- [ ] fix: Bug fix
+- [ ] docs: Documentation
+- [ ] style: Code formatting
+- [ ] refactor: Refactoring
+- [ ] chore: Tooling / build changes
 
-## 自检清单
+## Checklist
 
-- [ ] 代码已运行 `npm run lint` 无报错(若改动 JS)
-- [ ] 代码已运行 `npm run format`(若改动 JS/CSS/HTML)
-- [ ] 已按 [AGENTS.md](../AGENTS.md) 第 5 节手动验证相关验收项
-- [ ] **PR 中不包含任何真实 Token**(`eyJ` 开头的字符串)
-- [ ] PR 不包含 `node_modules/` / `dist/` / `*.zip` 等产物
-- [ ] commit message 遵循 Conventional Commits 规范
+- [ ] Ran `npm run lint` with no errors (if JS was changed)
+- [ ] Ran `npm run format` (if JS/CSS/HTML was changed)
+- [ ] Manually verified relevant acceptance tests per [AGENTS.md](../AGENTS.md) Section 5
+- [ ] **This PR does not contain any real tokens** (strings starting with `eyJ`)
+- [ ] This PR does not include `node_modules/` / `dist/` / `*.zip` or other build artifacts
+- [ ] Commit messages follow the Conventional Commits convention
 
-## 关联 Issue
+## Related Issues
 
-<!-- 如 Closes #1,无则留空 -->
+<!-- e.g. Closes #1, leave blank if none -->
 
-## ⚠️ Token 泄露检查
+## ⚠️ Token Leak Check
 
-> 如果本 PR 的代码、注释、截图、日志中**包含真实 Token**,作者将立即关闭本 PR 并要求删除提交。
+> If this PR's code, comments, screenshots, or logs **contain real tokens**, the author will close this PR immediately and request the commit to be rewritten.
 >
-> 如需在代码中演示 Token,请使用明显的占位符,如 `"eyJFAKE.xxx.yyy-FOR-TEST-ONLY"`。
+> If you need to demonstrate a token in code, use an obvious placeholder such as `"eyJFAKE.xxx.yyy-FOR-TEST-ONLY"`.

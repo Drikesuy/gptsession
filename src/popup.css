@@ -22,11 +22,39 @@ body {
 .title {
   font-size: 20px;
   font-weight: 700;
-  text-align: center;
   background: linear-gradient(135deg, #00d2ff, #7b2ff7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.header-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.btn-lang {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 3px 10px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: transparent;
+  color: #aaa;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-lang:hover {
+  border-color: #7b2ff7;
+  color: #fff;
+  background: rgba(123, 47, 247, 0.2);
 }
 
 .subtitle {
@@ -106,18 +134,24 @@ body {
 
 .history-group {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.history-group .label {
-  flex-shrink: 0;
+.history-header {
+  display: flex;
+  align-items: center;
+}
+
+.history-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .history-select {
   flex: 1;
-  min-width: 120px;
+  min-width: 0;
   padding: 8px 10px;
   border: 1px solid #333;
   border-radius: 8px;
@@ -134,6 +168,7 @@ body {
 }
 
 .btn-delete {
+  flex-shrink: 0;
   padding: 8px 12px;
   border: 1px solid #e74c3c;
   border-radius: 8px;
@@ -142,6 +177,7 @@ body {
   font-size: 12px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
 }
 
 .btn-delete:hover {
@@ -150,6 +186,7 @@ body {
 }
 
 .btn-clear-all {
+  flex-shrink: 0;
   padding: 8px 12px;
   border: 1px solid #f39c12;
   border-radius: 8px;
@@ -158,6 +195,7 @@ body {
   font-size: 12px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
 }
 
 .btn-clear-all:hover {

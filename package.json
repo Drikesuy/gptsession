@@ -1,16 +1,16 @@
 {
   "name": "gptsession",
-  "version": "1.0.0",
-  "description": "一键静默注入 ChatGPT Session Token,实现免密登录的 Chrome 扩展(Manifest V3)",
+  "version": "1.1.0",
+  "description": "One-click silent injection of ChatGPT Session Token for passwordless login — a Chrome Extension built with Manifest V3",
   "license": "MIT",
   "author": "Drikesuy",
   "homepage": "https://github.com/Drikesuy/gptsession",
   "private": true,
   "scripts": {
-    "lint": "eslint popup.js background.js",
-    "lint:fix": "eslint --fix popup.js background.js",
-    "format": "prettier --write \"popup.js\" \"background.js\" \"popup.css\" \"popup.html\"",
-    "format:check": "prettier --check \"popup.js\" \"background.js\" \"popup.css\" \"popup.html\""
+    "lint": "eslint src/popup.js src/background.js",
+    "lint:fix": "eslint --fix src/popup.js src/background.js",
+    "format": "prettier --write \"src/**/*.{js,css,html}\"",
+    "format:check": "prettier --check \"src/**/*.{js,css,html}\""
   },
   "devDependencies": {
     "eslint": "^8.57.0",

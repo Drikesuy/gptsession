@@ -1,4 +1,4 @@
-# ===== 操作系统 =====
+# ===== OS Files =====
 # macOS
 .DS_Store
 .AppleDouble
@@ -15,14 +15,14 @@ $RECYCLE.BIN/
 # Linux
 *~
 
-# ===== 编辑器 / IDE =====
+# ===== Editors / IDE =====
 .vscode/
 .idea/
 *.swp
 *.swo
 *sublime-*
 
-# ===== Node(若以后引入构建工具链) =====
+# ===== Node.js (in case build tooling is added later) =====
 node_modules/
 .eslintcache
 npm-debug.log*
@@ -33,7 +33,7 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# ===== 构建产物 / 打包 =====
+# ===== Build Artifacts / Packages =====
 dist/
 build/
 *.zip
@@ -41,30 +41,32 @@ build/
 *.pem
 *.xpi
 
-# ===== 日志 / 临时 =====
+# ===== Logs / Temp =====
 *.log
 *.tmp
 *.bak
 .cache/
 
-# ===== 敏感文件(防止误提交) =====
+# ===== Sensitive Files (prevent accidental commits) =====
 .env
 .env.local
 *.secret
 *.key
 secrets/
 
-# ===== 真实 Token 备份(防止泄露) =====
+# ===== Real Token Backups (prevent leaks) =====
 *.token
 token-*.txt
 my-token*.txt
-session示例*.json
 session*.json
-*示例*.json
 *token*.json
+session-example*.json
+session示例*.json
+*example*.json
+*示例*.json
 secrets/
 
-# ===== 调试导出(扩展运行时手动 dump 的真实数据) =====
+# ===== Debug Exports (real data dumped during extension runtime) =====
 cookies.json
 chatgpt-session*.json
 dump-*.json
@@ -72,3 +74,6 @@ export-*.json
 *-cookie.json
 sniff-*.json
 har-*.json
+
+# ===== Working files (originals before renaming) =====
+效果图*.png

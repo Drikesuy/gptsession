@@ -1,40 +1,40 @@
 ---
-name: Bug 报告
-about: 报告 gptsession 的 bug
+name: Bug Report
+about: Report a bug in gptsession
 title: "[BUG] "
 labels: bug
 assignees: ''
 ---
 
-## Bug 描述
+## Bug Description
 
-<!-- 简要描述遇到了什么问题 -->
+<!-- Briefly describe the issue you encountered -->
 
-## 复现步骤
+## Steps to Reproduce
 
 1.
 2.
 3.
 
-## 期望行为
+## Expected Behavior
 
-<!-- 应该发生什么 -->
+<!-- What should have happened -->
 
-## 实际行为
+## Actual Behavior
 
-<!-- 实际发生了什么 -->
+<!-- What actually happened -->
 
-## 环境
+## Environment
 
-- 浏览器及版本: <!-- 如 Chrome 120 -->
-- 扩展版本: <!-- 如 1.0.0,见 chrome://extensions -->
-- 操作系统: <!-- 如 Windows 11 -->
+- Browser & version: <!-- e.g. Chrome 120 -->
+- Extension version: <!-- e.g. 1.0.0, see chrome://extensions -->
+- Operating system: <!-- e.g. Windows 11 -->
 
-## 附加信息
+## Additional Information
 
-<!-- 截图、日志等。⚠️ 严禁包含真实 Token(eyJ 开头的字符串),如必要请打码 -->
+<!-- Screenshots, logs, etc. ⚠️ Do NOT include real tokens (strings starting with eyJ). Redact if necessary. -->
 
-## 自检
+## Checklist
 
-- [ ] 我已阅读 [README.md](../../README.md) 的免责声明
-- [ ] 我已确认上报内容**不包含**任何真实 Token
+- [ ] I have read the [README.md](../../README.md) disclaimer
+- [ ] I confirm that this report **does not contain** any real tokens

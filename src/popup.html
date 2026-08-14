@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gptsession</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header-row">
+      <h1 class="title">gptsession</h1>
+      <button id="langToggle" class="btn-lang" type="button" title="Switch language" aria-label="Switch language">EN</button>
+    </div>
+    <p class="subtitle" data-i18n="subtitle">One-click Session Token injection for passwordless login</p>
+
+    <div class="input-group">
+      <div class="input-header">
+        <label for="tokenInput" class="label">Session Token</label>
+        <div class="input-actions">
+          <button id="copyTokenBtn" class="btn-mini" type="button" data-i18n-title="copyTitle" data-i18n-aria="copyAria" data-i18n="copyBtn">Copy</button>
+          <button id="clearInputBtn" class="btn-mini" type="button" data-i18n-title="clearInputTitle" data-i18n-aria="clearInputAria" data-i18n="clearInputBtn">Clear</button>
+        </div>
+      </div>
+      <textarea id="tokenInput" class="token-input" data-i18n-placeholder="tokenPlaceholder" rows="4"
+        spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"
+        aria-label="Session Token"></textarea>
+      <p class="hint" data-i18n="hint">Tip: Ctrl+Enter to inject quickly</p>
+    </div>
+
+    <div class="history-group" id="historyGroup" style="display: none;">
+      <div class="history-header">
+        <label for="historySelect" class="label" data-i18n="historyLabel">Account History</label>
+      </div>
+      <div class="history-controls">
+        <select id="historySelect" class="history-select" data-i18n-aria="historyAria">
+          <option value="" data-i18n="historyPlaceholder">-- Select account --</option>
+        </select>
+        <button id="deleteHistoryBtn" class="btn-delete" type="button" data-i18n-title="deleteHistoryTitle" data-i18n-aria="deleteHistoryAria" data-i18n="deleteBtn">Delete</button>
+        <button id="clearAllHistoryBtn" class="btn-clear-all" type="button" data-i18n-title="clearAllTitle" data-i18n-aria="clearAllAria" data-i18n="clearAllBtn">Clear All</button>
+      </div>
+    </div>
+
+    <button id="injectBtn" class="btn-inject" type="button" data-i18n="injectBtn">Inject Token</button>
+
+    <div id="statusBox" class="status-box" role="alert" aria-live="assertive" style="display: none;"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

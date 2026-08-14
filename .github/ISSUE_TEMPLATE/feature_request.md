@@ -1,27 +1,27 @@
 ---
-name: 功能建议
-about: 为 gptsession 提出新功能建议
+name: Feature Request
+about: Suggest a new feature for gptsession
 title: "[FEAT] "
 labels: enhancement
 assignees: ''
 ---
 
-## 想要的功能
+## Feature Request
 
-<!-- 描述你希望新增的功能 -->
+<!-- Describe the feature you'd like to see added -->
 
-## 解决的问题
+## Problem It Solves
 
-<!-- 这个功能能解决什么场景的痛点 -->
+<!-- What pain point does this feature address? -->
 
-## 建议的实现方式
+## Suggested Implementation
 
-<!-- 可选:你期望如何实现 -->
+<!-- Optional: how would you like it to be implemented? -->
 
-## 边界确认
+## Scope Confirmation
 
-本项目**不会**接受以下功能(参见 [README 贡献指南](../../README.md#贡献指南)):
+This project will **not** accept the following features (see [README Project Scope](../../README.md#-project-scope)):
 
-- [ ] 我确认此请求不涉及上架 Chrome Web Store
-- [ ] 我确认此请求不涉及批量注册 / 自动登录多账号 / 绕过风控
-- [ ] 我确认此请求不涉及商业转售账号相关功能
+- [ ] I confirm this request does not involve Chrome Web Store publishing
+- [ ] I confirm this request does not involve bulk registration / multi-account auto-login / bypassing risk controls
+- [ ] I confirm this request does not involve commercial account resale or black-market features

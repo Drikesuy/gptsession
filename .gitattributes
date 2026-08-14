@@ -1,7 +1,7 @@
-# 默认:文本文件统一使用 LF 行尾(跨平台一致)
+# Default: normalize text files to LF line endings (cross-platform consistency)
 * text=auto eol=lf
 
-# 明确指定常见文本类型
+# Explicitly declare common text file types
 *.js     text eol=lf
 *.json   text eol=lf
 *.html   text eol=lf
@@ -10,12 +10,12 @@
 *.yml    text eol=lf
 *.yaml   text eol=lf
 
-# Windows 专用脚本保持 CRLF
+# Windows-specific scripts keep CRLF
 *.bat    text eol=crlf
 *.cmd    text eol=crlf
 *.ps1    text eol=crlf
 
-# 二进制文件:不做行尾转换
+# Binary files: no line ending conversion
 *.png    binary
 *.jpg    binary
 *.jpeg   binary

@@ -1,61 +1,61 @@
-// ==================== 配置 ====================
-const DEBUG = false; // 调试日志开关：发布时 false，排查问题时改 true
+// ==================== Configuration ====================
+const DEBUG = false; // Debug log toggle: false for release, set to true when troubleshooting
 
 const COOKIE_URL = "https://chatgpt.com/";
 const COOKIE_NAME = "__Secure-next-auth.session-token";
-const MAX_CHUNK_SIZE = 3900; // 留出余量
+const MAX_CHUNK_SIZE = 3900; // Leave headroom to avoid cookie size limits
 
-// ==================== 调试日志 ====================
+// ==================== Debug Logging ====================
 function log(...args) {
   if (DEBUG) console.log("[TokenInjector]", ...args);
 }
 
-// ==================== Token 格式校验 ====================
-// 兼容两种格式：
-// - JWT：eyJxxx.eyJxxx.signature（3 段，均非空）
-// - JWE：eyJxxx..iv.ciphertext.tag（5 段，dir 算法下 encrypted_key 段为空，故出现 ".."）
-// ChatGPT 的 __Secure-next-auth.session-token 实为 JWE（alg=dir, enc=A256GCM）
+// ==================== Token Validation ====================
+// Supports two formats:
+// - JWT: eyJxxx.eyJxxx.signature (3 segments, all non-empty)
+// - JWE: eyJxxx..iv.ciphertext.tag (5 segments; with dir algorithm the encrypted_key segment is empty, hence "..")
+// ChatGPT's __Secure-next-auth.session-token is actually a JWE (alg=dir, enc=A256GCM)
 function isValidToken(token) {
   if (typeof token !== "string" || token.length < 20) return false;
   if (!token.startsWith("eyJ")) return false;
   const parts = token.split(".");
-  // 至少 2 段（header.payload）；JWE 为 5 段
+  // At least 2 segments (header.payload); JWE has 5 segments
   if (parts.length < 2) return false;
-  // * 允许空段（JWE 的 encrypted_key 在 dir 算法下为空）
+  // Allow empty segments (JWE encrypted_key is empty under dir algorithm)
   const base64urlRe = /^[A-Za-z0-9_-]*$/;
   return parts.every((p) => base64urlRe.test(p));
 }
 
-// ==================== 消息监听 ====================
+// ==================== Message Listener ====================
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "injectToken" && message.token) {
     handleInjectToken(message.token)
       .then((result) => sendResponse({ success: true, ...result }))
       .catch((err) => sendResponse({ success: false, error: err.message }));
-    return true;
+    return true; // Keep the message channel open for async response
   }
 });
 
-// ==================== 核心逻辑：分片写入 Cookie ====================
+// ==================== Core Logic: Chunked Cookie Writing ====================
 async function handleInjectToken(token) {
-  // 0. 校验 Token 格式（最后防线）
+  // 0. Validate token format (last line of defense)
   if (!isValidToken(token)) {
-    throw new Error("Token 格式不合法（应为以 eyJ 开头的 JWT 字符串）");
+    throw new Error("error_invalid_token");
   }
 
-  log("收到 Token，长度:", token.length);
+  log("Token received, length:", token.length);
 
-  // 1. 删除旧 Cookie（包括可能存在的分片 Cookie）
+  // 1. Remove old cookies (including any legacy chunked cookies)
   await removeOldCookies();
 
-  // 2. 按 MAX_CHUNK_SIZE 分片（next-auth chunked cookie 机制）
+  // 2. Split into chunks per MAX_CHUNK_SIZE (next-auth chunked cookie convention)
   const chunks = [];
   for (let i = 0; i < token.length; i += MAX_CHUNK_SIZE) {
     chunks.push(token.slice(i, i + MAX_CHUNK_SIZE));
   }
-  log("分片数量:", chunks.length, "各片长度:", chunks.map((c) => c.length));
+  log("Chunk count:", chunks.length, "Chunk lengths:", chunks.map((c) => c.length));
 
-  // 3. 逐片写入（含 domain 和 httpOnly，与真实 ChatGPT Cookie 一致）
+  // 3. Write chunks one by one (with domain and httpOnly to match real ChatGPT cookies)
   for (let i = 0; i < chunks.length; i++) {
     const cookieName = chunks.length > 1 ? COOKIE_NAME + "." + i : COOKIE_NAME;
 
@@ -71,22 +71,22 @@ async function handleInjectToken(token) {
       expirationDate: Math.floor(Date.now() / 1000) + 365 * 24 * 60 * 60,
     };
 
-    log("正在写入分片", i, "名称:", cookieName, "值长度:", chunks[i].length);
+    log("Writing chunk", i, "name:", cookieName, "value length:", chunks[i].length);
 
     const cookie = await chrome.cookies.set(cookieDetails);
     if (!cookie) {
-      throw new Error("分片 " + i + " 写入失败（chrome.cookies.set 返回 null）");
+      throw new Error("error_chunk_write_failed:" + i);
     }
-    log("分片", i, "写入成功");
+    log("Chunk", i, "written successfully");
   }
 
-  // 4. 验证 Cookie 是否真正写入 Cookie 数据库
+  // 4. Verify cookies were actually written to the cookie store
   const allCookies = await chrome.cookies.getAll({ domain: "chatgpt.com" });
   const sessionCookies = allCookies.filter(
     (c) => c.name.indexOf("__Secure-next-auth.session-token") === 0
   );
   log(
-    "数据库中的 session Cookie:",
+    "Session cookies in store:",
     sessionCookies.map((c) => ({
       name: c.name,
       valueLen: c.value.length,
@@ -97,35 +97,35 @@ async function handleInjectToken(token) {
   );
 
   if (sessionCookies.length === 0) {
-    throw new Error("Cookie 验证失败：数据库中未找到 session Cookie");
+    throw new Error("error_cookie_verify_failed");
   }
 
-  // 5. 等待 500ms 确保 Cookie 写入完成
+  // 5. Wait 500ms to ensure cookies are fully persisted
   await new Promise((r) => setTimeout(r, 500));
 
-  // 6. 查询当前活跃 Tab 并执行重载/跳转
+  // 6. Query active tab and reload/redirect
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
   const currentTab = tabs[0];
 
   if (!currentTab || !currentTab.url) {
-    // Cookie 已写入，但无活动标签页可刷新/跳转
+    // Cookies written but no active tab to reload/redirect
     return { noTab: true };
   }
 
   if (currentTab.url.includes("chatgpt.com")) {
     await chrome.tabs.reload(currentTab.id);
-    log("已刷新 ChatGPT 页面");
+    log("ChatGPT page reloaded");
   } else {
     await chrome.tabs.update(currentTab.id, { url: COOKIE_URL });
-    log("已跳转至 ChatGPT");
+    log("Redirected to ChatGPT");
   }
 
   return {};
 }
 
-// ==================== 清理旧 Cookie（动态查询所有同名分片） ====================
+// ==================== Cleanup Old Cookies (dynamically query all matching chunks) ====================
 async function removeOldCookies() {
-  // 查询所有 __Secure-next-auth.session-token* Cookie（含历史分片 .0/.1/...）
+  // Query all __Secure-next-auth.session-token* cookies (including legacy .0/.1/... chunks)
   const allCookies = await chrome.cookies.getAll({ domain: "chatgpt.com" });
   const stale = allCookies.filter(
     (c) => c.name.indexOf("__Secure-next-auth.session-token") === 0
@@ -135,19 +135,19 @@ async function removeOldCookies() {
     try {
       await chrome.cookies.remove({ url: COOKIE_URL, name: c.name });
     } catch (_e) {
-      // 单条删除失败不阻断流程
+      // Individual removal failure should not block the flow
     }
   }
 
-  // 兼容清理可能的测试 Cookie
+  // Also clean up possible test cookies
   try {
     await chrome.cookies.remove({
       url: COOKIE_URL,
       name: "__Secure-next-auth.session-token-test",
     });
   } catch (_e) {
-    // 忽略
+    // Ignore
   }
 
-  log("旧 Cookie 已清理，共", stale.length, "条");
+  log("Old cookies cleaned, count:", stale.length);
 }

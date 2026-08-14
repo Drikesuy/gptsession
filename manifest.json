@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "gptsession",
+  "short_name": "gptsession",
+  "version": "1.0.0",
+  "version_name": "1.0.0",
+  "description": "一键静默注入 ChatGPT Session Token，实现免密登录",
+  "minimum_chrome_version": "110",
+  "author": "Drikesuy",
+  "homepage_url": "https://github.com/Drikesuy/gptsession",
+  "permissions": ["cookies", "tabs", "storage", "clipboardRead"],
+  "host_permissions": ["https://chatgpt.com/*", "https://*.chatgpt.com/*"],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "gptsession",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

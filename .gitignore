@@ -1,0 +1,74 @@
+# ===== 操作系统 =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ===== 编辑器 / IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*sublime-*
+
+# ===== Node(若以后引入构建工具链) =====
+node_modules/
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ===== 构建产物 / 打包 =====
+dist/
+build/
+*.zip
+*.crx
+*.pem
+*.xpi
+
+# ===== 日志 / 临时 =====
+*.log
+*.tmp
+*.bak
+.cache/
+
+# ===== 敏感文件(防止误提交) =====
+.env
+.env.local
+*.secret
+*.key
+secrets/
+
+# ===== 真实 Token 备份(防止泄露) =====
+*.token
+token-*.txt
+my-token*.txt
+session示例*.json
+session*.json
+*示例*.json
+*token*.json
+secrets/
+
+# ===== 调试导出(扩展运行时手动 dump 的真实数据) =====
+cookies.json
+chatgpt-session*.json
+dump-*.json
+export-*.json
+*-cookie.json
+sniff-*.json
+har-*.json

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gptsession</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">gptsession</h1>
+    <p class="subtitle">一键注入 Session Token，免密登录</p>
+
+    <div class="input-group">
+      <div class="input-header">
+        <label for="tokenInput" class="label">Session Token</label>
+        <div class="input-actions">
+          <button id="copyTokenBtn" class="btn-mini" type="button" title="复制输入框中的 Token" aria-label="复制 Token">复制</button>
+          <button id="clearInputBtn" class="btn-mini" type="button" title="清空输入框" aria-label="清空输入框">清空</button>
+        </div>
+      </div>
+      <textarea id="tokenInput" class="token-input" placeholder="粘贴 __Secure-next-auth.session-token 或 JWT 字符串..." rows="4"
+        spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"
+        aria-label="Session Token 输入框"></textarea>
+      <p class="hint">提示：Ctrl+Enter 快速注入</p>
+    </div>
+
+    <div class="history-group" id="historyGroup" style="display: none;">
+      <label for="historySelect" class="label">历史账号</label>
+      <select id="historySelect" class="history-select" aria-label="历史账号列表">
+        <option value="">-- 选择历史账号 --</option>
+      </select>
+      <button id="deleteHistoryBtn" class="btn-delete" type="button" title="删除选中的历史账号" aria-label="删除选中的历史账号">删除</button>
+      <button id="clearAllHistoryBtn" class="btn-clear-all" type="button" title="清空全部历史账号" aria-label="清空全部历史账号">清空全部</button>
+    </div>
+
+    <button id="injectBtn" class="btn-inject" type="button">注入 Token</button>
+
+    <div id="statusBox" class="status-box" role="alert" aria-live="assertive" style="display: none;"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

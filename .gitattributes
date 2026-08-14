@@ -1,0 +1,26 @@
+# 默认:文本文件统一使用 LF 行尾(跨平台一致)
+* text=auto eol=lf
+
+# 明确指定常见文本类型
+*.js     text eol=lf
+*.json   text eol=lf
+*.html   text eol=lf
+*.css    text eol=lf
+*.md     text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+
+# Windows 专用脚本保持 CRLF
+*.bat    text eol=crlf
+*.cmd    text eol=crlf
+*.ps1    text eol=crlf
+
+# 二进制文件:不做行尾转换
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.zip    binary
+*.crx    binary
+*.pem    binary

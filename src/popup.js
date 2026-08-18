@@ -322,33 +322,63 @@ function hideStatus() {
 
 // ==================== Token Cleaning ====================
 // Returns { token, label, message } or null
+// Robustly extracts a token from:
+//  - Raw JWT/JWE string
+//  - Cookie-prefixed string (__Secure-next-auth.session-token=eyJ...)
+//  - Complete JSON (session API response, token export file, ...)
+//  - Partial/incomplete JSON or arbitrary text containing a JWT
+// Supports both camelCase (sessionToken) and snake_case (session_token) keys.
 function cleanToken(raw) {
   let cleaned = raw.trim();
   let label = "";
   let message = "";
 
   // Try parsing as JSON (user may have pasted the full session API response)
+  let parsed = null;
   try {
-    const json = JSON.parse(cleaned);
-    if (json.user && json.user.email) {
-      label = json.user.email;
-    } else if (json.user && json.user.name) {
-      label = json.user.name;
+    parsed = JSON.parse(cleaned);
+  } catch (_e) {
+    // Not valid JSON (possibly incomplete); fall through to regex extraction
+  }
+
+  if (parsed && typeof parsed === "object") {
+    // Extract label (email or name) from common locations
+    if (parsed.user && parsed.user.email) {
+      label = parsed.user.email;
+    } else if (parsed.user && parsed.user.name) {
+      label = parsed.user.name;
+    } else if (typeof parsed.email === "string") {
+      label = parsed.email;
+    } else if (typeof parsed.name === "string") {
+      label = parsed.name;
     }
 
     // Prefer sessionToken (the actual __Secure-next-auth.session-token value)
-    if (json.sessionToken && typeof json.sessionToken === "string") {
-      message =
-        t("msgExtractedFromJson") + (label ? " (" + label + ")" : "");
-      return { token: json.sessionToken.trim(), label: label, message: message };
+    // Support both camelCase and snake_case keys
+    const sessionToken = parsed.sessionToken || parsed.session_token;
+    if (sessionToken && typeof sessionToken === "string") {
+      message = t("msgExtractedFromJson") + (label ? " (" + label + ")" : "");
+      return { token: sessionToken.trim(), label: label, message: message };
     }
     // Fallback: extract accessToken (not a session cookie, just an API token)
-    if (json.accessToken && typeof json.accessToken === "string") {
+    const accessToken = parsed.accessToken || parsed.access_token;
+    if (accessToken && typeof accessToken === "string") {
       message = t("msgExtractedAccessToken");
-      return { token: json.accessToken.trim(), label: label, message: message };
+      return { token: accessToken.trim(), label: label, message: message };
     }
-  } catch (_e) {
-    // Not JSON; proceed with regular cleaning
+    // Fallback: extract idToken (OpenID identity token, not a session cookie)
+    const idToken = parsed.idToken || parsed.id_token;
+    if (idToken && typeof idToken === "string") {
+      message = t("msgExtractedAccessToken");
+      return { token: idToken.trim(), label: label, message: message };
+    }
+  }
+
+  // Regex fallback: extract a JWT/JWE string from arbitrary (possibly incomplete) text.
+  // Matches "eyJ" + base64url chars, then one or more dot-separated base64url segments.
+  const jwtMatch = cleaned.match(/eyJ[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)+/);
+  if (jwtMatch) {
+    return { token: jwtMatch[0], label: "", message: "" };
   }
 
   // Strip __Secure-next-auth.session-token= prefix

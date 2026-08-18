@@ -77,3 +77,7 @@ har-*.json
 
 # ===== Working files (originals before renaming) =====
 效果图*.png
+
+# ===== Codex / token export files (prevent real token leaks) =====
+codex-*.json
+*-plus.json

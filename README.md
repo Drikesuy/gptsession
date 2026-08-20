@@ -41,7 +41,10 @@ Reasons:
 
 - **One-click injection**: Paste token → click button → cookie is written → page reloads / redirects
 - **Clipboard auto-detect**: When the popup opens, automatically reads the clipboard and prefills any JWT starting with `eyJ`
+- **Right-click paste**: Right-click anywhere in the popup to immediately read the clipboard and fill the input — no menu, no extra steps
 - **Smart token cleaning (foolproof)**: Automatically strips `__Secure-next-auth.session-token=` prefix, quotes, whitespace; extracts `sessionToken` from JSON session API responses
+- **Robust token extraction**: Supports both `camelCase` and `snake_case` JSON keys (`sessionToken` / `session_token`, `accessToken` / `access_token`, `idToken` / `id_token`); also auto-extracts the account email/name as a history label
+- **Partial/incomplete paste recovery**: If the pasted text is not valid JSON (e.g. truncated) but contains a JWT fragment, a regex fallback extracts the `eyJ...` string so incomplete pastes still work
 - **Token format validation**: Validates JWT format before writing (`eyJ` prefix, multiple base64url segments); rejects invalid tokens
 - **Chunked cookie writing**: Automatically splits oversized tokens using next-auth's chunked cookie convention (`.0`, `.1`, ...)
 - **Remove-then-write**: Dynamically queries and clears all existing cookies of the same name (including legacy chunks) before writing, avoiding conflicts
@@ -75,7 +78,10 @@ No Chrome Web Store publish needed — install directly in Developer Mode:
 1. **Get your token** — Log in to [chatgpt.com](https://chatgpt.com) first, then click the extension icon and press **Open** next to "Get token:" (or visit `https://chatgpt.com/api/auth/session` directly). Copy the `sessionToken` value from the JSON response (a JWT string starting with `eyJ`). You can also copy the **entire JSON response** and paste it directly — the extension auto-extracts `sessionToken`.
 2. Click the extension icon in the toolbar to open the popup
    - If the clipboard already contains text starting with `eyJ`, it will be auto-filled
-3. Paste the token (or full JSON) into the input field (prefixes, quotes, and formatting are handled automatically)
+3. Fill the input field — any of these works:
+   - **Paste** normally with `Ctrl+V` / `Cmd+V`
+   - **Right-click** anywhere in the popup to paste directly from the clipboard (no menu, instant paste)
+   - The extension accepts raw JWT strings, cookie-prefixed strings (`__Secure-next-auth.session-token=eyJ...`), full JSON responses, JSON with `snake_case` keys (`access_token` / `id_token` / `session_token`), and even **incomplete/truncated** text — a regex fallback recovers any `eyJ...` JWT fragment
 4. Click **Inject Token** (or press `Ctrl+Enter` while focused in the input field)
 5. On success, the page will automatically reload or redirect to ChatGPT, and you will be logged in
 6. Next time, select an account directly from the **Account History** dropdown to avoid re-pasting

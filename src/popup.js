@@ -72,6 +72,9 @@ const I18N = {
     dateLocale: "en-US",
     // Chunk error (with index)
     msgChunkFailed: "Chunk {index} write failed (chrome.cookies.set returned null)",
+    // Right-click paste
+    msgPastedFromClipboard: "Pasted from clipboard",
+    msgPasteFailed: "Paste failed, clipboard unreadable",
   },
   zh: {
     // Static HTML elements (data-i18n)
@@ -139,6 +142,9 @@ const I18N = {
     dateLocale: "zh-CN",
     // Chunk error (with index)
     msgChunkFailed: "分片 {index} 写入失败（chrome.cookies.set 返回 null）",
+    // Right-click paste
+    msgPastedFromClipboard: "已从剪贴板粘贴",
+    msgPasteFailed: "粘贴失败，剪贴板不可读",
   },
 };
 
@@ -485,6 +491,35 @@ function openSessionUrl() {
   chrome.tabs.create({ url: SESSION_URL });
   showStatus(t("msgUrlOpened"), "info");
 }
+
+// ==================== Right-click Paste ====================
+// Right-click anywhere in the popup directly reads the clipboard and fills the input.
+// No context menu is shown — the paste happens immediately on right-click.
+
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (text && text.trim()) {
+      tokenInput.value = text.trim();
+      // Re-run cleaning to show extraction messages (e.g. JSON detected)
+      const result = cleanToken(text);
+      if (result && result.message) {
+        showStatus(result.message, "info");
+      } else {
+        showStatus(t("msgPastedFromClipboard"), "info");
+      }
+    } else {
+      showStatus(t("msgPasteFailed"), "error");
+    }
+  } catch (_e) {
+    showStatus(t("msgPasteFailed"), "error");
+  }
+}
+
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  pasteFromClipboard();
+});
 
 // ==================== History Management ====================
 function buildHistoryLabel(entry, index) {
